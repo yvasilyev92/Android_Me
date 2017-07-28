@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.android.android_me.R;
+import com.example.android.android_me.data.AndroidImageAssets;
 
 // This activity will display a custom Android image composed of three body parts: head, body, and legs
 public class AndroidMeActivity extends AppCompatActivity {
@@ -31,19 +32,64 @@ public class AndroidMeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_android_me);
 
-        // Create a new head BodyPartFragment
-        BodyPartFragment headFragment = new BodyPartFragment();
+        //create new fragments only when there is no previously saved state
+        if (savedInstanceState == null){
 
-        // TODO (4) Set the list of image id's for the head fragment and set the position to the second image in the list
+            // Create a new head,body, and leg BodyPartFragment
+            BodyPartFragment headFragment = new BodyPartFragment();
+            BodyPartFragment bodyFragment = new BodyPartFragment();
+            BodyPartFragment legFragment = new BodyPartFragment();
 
-        // Add the fragment to its container using a FragmentManager and a Transaction
-        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction()
-                .add(R.id.head_container, headFragment)
-                .commit();
 
-        // TODO (5) Create and display the body and leg BodyPartFragments
 
+            //Set the list of image id's for the head fragment and set the position to the second image in the list
+            headFragment.setImageIds(AndroidImageAssets.getHeads());
+            //get the correct index to access in the array of head images from intent, default value is 0
+            int headIndex = getIntent().getIntExtra("headIndex", 0);
+            headFragment.setListIndex(headIndex);
+
+
+            //Set the list of image id's for the body fragment
+            bodyFragment.setImageIds(AndroidImageAssets.getBodies());
+            //get the correct index to access in the array of body images from intent, default value is 0
+            int bodyIndex = getIntent().getIntExtra("bodyIndex", 0);
+            bodyFragment.setListIndex(bodyIndex);
+
+
+
+            //Set the list of image id's for the leg fragment
+            legFragment.setImageIds(AndroidImageAssets.getLegs());
+            //get the correct index to access in the array of leg images from intent, default value is 0
+            int legIndex = getIntent().getIntExtra("legIndex", 0);
+            legFragment.setListIndex(legIndex);
+
+
+
+
+
+
+
+            // Add the fragment to its container using a FragmentManager and a Transaction
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+
+
+
+
+            //Create and display the head, body, and leg BodyPartFragments
+            fragmentManager.beginTransaction()
+                    .add(R.id.head_container, headFragment)
+                    .commit();
+            fragmentManager.beginTransaction()
+                    .add(R.id.body_container, bodyFragment)
+                    .commit();
+            fragmentManager.beginTransaction()
+                    .add(R.id.leg_container, legFragment)
+                    .commit();
+
+
+
+        }
     }
 }
